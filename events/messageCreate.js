@@ -197,6 +197,7 @@ else if (command === 'nuke') {
                 if (collected.size === 0) {
                     message.channel.send('Nuke operation canceled. You did not confirm in time.');
                 }
+            }
         }
     },
 };
