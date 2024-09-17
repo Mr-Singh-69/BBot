@@ -164,6 +164,39 @@ else if (command === 'clearmsg') {
             message.channel.bulkDelete(userMessages)
                 .then(deleted => message.channel.send(`Deleted ${deleted.size} messages from ${user.username}.`))
                 .catch(error => message.channel.send('Error deleting messages. Ensure they are not older than 14 days.'));
+
+else if (command === 'nuke') {
+      
+            if (!message.member.permissions.has(PermissionsBitField.Flags.ManageChannels)) {
+                return message.channel.send('You do not have the necessary permissions to nuke this channel.');
+            }
+
+       
+            message.channel.send('Are you sure you want to nuke this channel? Type `#confirmnuke` to proceed.');
+
+      
+            const filter = (m) => m.author.id === message.author.id && m.content.toLowerCase() === '#confirmnuke';
+            const collector = message.channel.createMessageCollector({ filter, time: 10000, max: 1 });
+
+            collector.on('collect', async () => {
+                const channelPosition = message.channel.position;
+
+       
+                const newChannel = await message.channel.clone();
+
+                await newChannel.setPosition(channelPosition);
+
+           
+                await message.channel.delete();
+
+           
+                newChannel.send('💥 Channel has been nuked! 💥');
+            });
+
+            collector.on('end', (collected) => {
+                if (collected.size === 0) {
+                    message.channel.send('Nuke operation canceled. You did not confirm in time.');
+                }
         }
     },
 };
