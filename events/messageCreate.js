@@ -85,7 +85,7 @@ module.exports = {
             } else {
                 message.channel.send(`I win! I chose ${botChoice}.`);
             }
-else if (command === 'guildpermissions') {
+        else if (command === 'guildpermissions') {
             
             const botMember = await message.guild.members.fetch(message.client.user.id);
             const guildPermissions = botMember.permissions;
