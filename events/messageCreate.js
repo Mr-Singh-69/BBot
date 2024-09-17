@@ -9,7 +9,7 @@ module.exports = {
         const args = message.content.slice(prefix.length).trim().split(/ +/);
         const command = args.shift()?.toLowerCase();
 
-        // Ping command
+
         if (command === 'ping') {
             message.channel.send(`Pong! Latency is ${message.client.ws.ping}ms.`);
         }
@@ -123,6 +123,25 @@ module.exports = {
 
   
             message.channel.bulkDelete(botMessages)
+                .then(deleted => message.channel.send(`Deleted ${deleted.size} bot messages.`))
+                .catch(error => message.channel.send('Error deleting messages. Ensure they are not older than 14 days.'));
+        }
+
+else if (command === 'clearallbot') {
+            const deleteCount = parseInt(args[0], 10);
+
+            if (isNaN(deleteCount) || deleteCount <= 0) {
+                return message.channel.send('Please provide a valid number of bot messages to delete.');
+            }
+
+    
+            const fetchedMessages = await message.channel.messages.fetch({ limit: 100 });
+
+        
+            const allBotMessages = fetchedMessages.filter(msg => msg.author.bot).first(deleteCount);
+
+     
+            message.channel.bulkDelete(allBotMessages)
                 .then(deleted => message.channel.send(`Deleted ${deleted.size} bot messages.`))
                 .catch(error => message.channel.send('Error deleting messages. Ensure they are not older than 14 days.'));
         }
