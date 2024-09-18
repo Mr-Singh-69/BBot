@@ -9,7 +9,6 @@ module.exports = {
         const args = message.content.slice(prefix.length).trim().split(/ +/);
         const command = args.shift()?.toLowerCase();
 
-
         if (command === 'ping') {
             message.channel.send(`Pong! Latency is ${message.client.ws.ping}ms.`);
         }
@@ -46,7 +45,6 @@ module.exports = {
             message.channel.send(randomJoke);
         }
 
-
         else if (command === 'roast') {
             const roasts = [
                 "You're like a cloud. When you disappear, it's a beautiful day.",
@@ -66,7 +64,6 @@ module.exports = {
             message.channel.send(`${user.username}, ${randomRoast}`);
         }
 
- 
         else if (command === 'rps') {
             const choices = ["rock", "paper", "scissors"];
             const userChoice = args[0]?.toLowerCase();
@@ -91,61 +88,49 @@ module.exports = {
             }
         }
 
-  
         else if (command === 'guildpermissions') {
-   
             const botMember = await message.guild.members.fetch(message.client.user.id);
             const guildPermissions = botMember.permissions;
 
             const permissions = Object.keys(PermissionsBitField.Flags)
                 .filter(perm => guildPermissions.has(perm));
 
-  
             const permissionsList = permissions.map(perm => `\`${perm}\``).join(', ');
 
-        
             message.channel.send(`Here are the permissions I have in this server: ${permissionsList || 'No permissions.'}`);
         }
 
-    
         else if (command === 'clearbot') {
-         
             const deleteCount = parseInt(args[0], 10);
 
-        
             if (isNaN(deleteCount) || deleteCount <= 0) {
                 return message.channel.send('Please provide a valid number of messages to delete.');
             }
 
             const fetchedMessages = await message.channel.messages.fetch({ limit: 100 });
-     
             const botMessages = fetchedMessages.filter(msg => msg.author.bot).first(deleteCount);
 
-  
             message.channel.bulkDelete(botMessages)
                 .then(deleted => message.channel.send(`Deleted ${deleted.size} bot messages.`))
                 .catch(error => message.channel.send('Error deleting messages. Ensure they are not older than 14 days.'));
         }
 
-else if (command === 'clearallbot') {
+        else if (command === 'clearallbot') {
             const deleteCount = parseInt(args[0], 10);
 
             if (isNaN(deleteCount) || deleteCount <= 0) {
                 return message.channel.send('Please provide a valid number of bot messages to delete.');
             }
 
-    
             const fetchedMessages = await message.channel.messages.fetch({ limit: 100 });
-
-        
             const allBotMessages = fetchedMessages.filter(msg => msg.author.bot).first(deleteCount);
 
-     
             message.channel.bulkDelete(allBotMessages)
                 .then(deleted => message.channel.send(`Deleted ${deleted.size} bot messages.`))
                 .catch(error => message.channel.send('Error deleting messages. Ensure they are not older than 14 days.'));
         }
-else if (command === 'clearmsg') {
+
+        else if (command === 'clearmsg') {
             const user = message.mentions.users.first();
             const deleteCount = parseInt(args[1], 10);
 
@@ -158,38 +143,37 @@ else if (command === 'clearmsg') {
             }
 
             const fetchedMessages = await message.channel.messages.fetch({ limit: 100 });
-
             const userMessages = fetchedMessages.filter(msg => msg.author.id === user.id).first(deleteCount);
 
             message.channel.bulkDelete(userMessages)
                 .then(deleted => message.channel.send(`Deleted ${deleted.size} messages from ${user.username}.`))
                 .catch(error => message.channel.send('Error deleting messages. Ensure they are not older than 14 days.'));
+        }
 
-else if (command === 'nuke') {
-      
+   
+        else if (command === 'nuke') {
+    
             if (!message.member.permissions.has(PermissionsBitField.Flags.ManageChannels)) {
                 return message.channel.send('You do not have the necessary permissions to nuke this channel.');
             }
 
-       
+          
             message.channel.send('Are you sure you want to nuke this channel? Type `#confirmnuke` to proceed.');
 
-      
+          
             const filter = (m) => m.author.id === message.author.id && m.content.toLowerCase() === '#confirmnuke';
             const collector = message.channel.createMessageCollector({ filter, time: 10000, max: 1 });
 
             collector.on('collect', async () => {
                 const channelPosition = message.channel.position;
 
-       
                 const newChannel = await message.channel.clone();
 
                 await newChannel.setPosition(channelPosition);
 
-           
+               
                 await message.channel.delete();
 
-           
                 newChannel.send('💥 Channel has been nuked! 💥');
             });
 
@@ -197,7 +181,7 @@ else if (command === 'nuke') {
                 if (collected.size === 0) {
                     message.channel.send('Nuke operation canceled. You did not confirm in time.');
                 }
-            }
+            });
         }
     },
 };
