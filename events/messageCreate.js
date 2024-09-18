@@ -153,11 +153,6 @@ module.exports = {
    
         else if (command === 'nuke') {
     
-            if (!message.member.permissions.has(PermissionsBitField.Flags.ManageChannels)) {
-                return message.channel.send('You do not have the necessary permissions to nuke this channel.');
-            }
-
-          
             message.channel.send('Are you sure you want to nuke this channel? Type `#confirmnuke` to proceed.');
 
           
