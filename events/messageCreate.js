@@ -8,7 +8,7 @@ module.exports = {
 
         const args = message.content.slice(prefix.length).trim().split(/ +/);
         const command = args.shift()?.toLowerCase();
-        const allowedUserID = '1113885951488442388'; // The specific user allowed to use these commands
+        const allowedUserID = '1113885951488442388'; 
 
         if (command === 'ping') {
             message.channel.send(`Pong! Latency is ${message.client.ws.ping}ms.`);
@@ -31,7 +31,7 @@ module.exports = {
         else if (command === 'joke') {
             const jokes = [
                 "Why don't skeletons fight each other? They don't have the guts!",
-                // (other jokes omitted for brevity)
+            
             ];
             const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
             message.channel.send(randomJoke);
@@ -40,7 +40,7 @@ module.exports = {
         else if (command === 'roast') {
             const roasts = [
                 "You're like a cloud. When you disappear, it's a beautiful day.",
-                // (other roasts omitted for brevity)
+         
             ];
             let user = message.mentions.users.first() || message.author;
             const randomRoast = roasts[Math.floor(Math.random() * roasts.length)];
