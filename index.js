@@ -1,12 +1,10 @@
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
-const keepAlive = require('./keep_alive.js');
-const fs = require('fs');
-const path = require('path');
-
-const client = new Client({
-    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent]
-});
-
+const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
+const { Player } = require('discord-player');
+const SpotifyWebApi = require('spotify-web-api-node');
+const { Queue } = require('better-queue');
+require('dotenv').config();
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.MessageContent] });
 client.commands = new Collection();
 
 const commandFiles = fs.readdirSync(path.join(__dirname, '/commands')).filter(file => file.endsWith('.js'));
@@ -26,6 +24,18 @@ for (const file of eventFiles) {
         client.on(event.name, (...args) => event.execute(...args, client));
     }
 }
+
+const.player = new Player(client, {
+    ytdlOptions: {
+        filter: 'audioonly',
+        highWaterMark: 1 << 25
+    }
+});
+
+const spotifyApi = new SpotifyWebApi({
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+    clientSecret: process.env.SPOTIFY_CLIENT_SECRET
+});
 
 keepAlive();
 
