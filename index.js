@@ -25,7 +25,7 @@ for (const file of eventFiles) {
     }
 }
 
-const.player = new Player(client, {
+const player = new Player(client, {
     ytdlOptions: {
         filter: 'audioonly',
         highWaterMark: 1 << 25
