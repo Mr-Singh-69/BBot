@@ -1,4 +1,4 @@
-const allowedUserID = '1113885951488442388'; 
+const allowedUserID = '1113885951488442388' || '1133761573467467888'; 
 
 module.exports = {
     name: 'timeout',
