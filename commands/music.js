@@ -3,14 +3,6 @@ module.exports = {
     async execute(message, args) {
         const voiceChannel = message.member.voice.channel;
 
-        if (!voiceChannel) {
-            return message.channel.send('You must be in a voice channel to use this command.');
-        }
-
-        if (!args[0]) {
-            return message.channel.send('Please provide a song to play.');
-        }
-
         const searchQuery = args.join(' ');
 
         const queue = player.createQueue(message.guild, {
@@ -19,7 +11,7 @@ module.exports = {
                 connection: null
             }
         });
-
+        
         try {
             if (!queue.connection) {
                 await queue.connect(voiceChannel);
@@ -29,10 +21,14 @@ module.exports = {
             console.error(`Error connecting to voice channel: ${error}`);
             return message.channel.send('Could not join the voice channel.');
         }
-
-    
-
         
+        if (!voiceChannel) {
+            return message.channel.send('You must be in a voice channel to use this command.');
+        }
+
+        if (!args[0]) {
+            return message.channel.send('Please provide a song to play.');
+        }
         else if (args[0] === 'spotify') {
             const spotifyQuery = args.slice(1).join(' ');
 
